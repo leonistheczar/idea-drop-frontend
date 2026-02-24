@@ -20,7 +20,6 @@ export const Route = createRootRoute({
     ],
   }),
   shellComponent: RootDocument,
-  // ✅ these belong here, inside createRootRoute — not inside RootDocument
   notFoundComponent: () => (
     <div className="min-h-screen flex flex-col items-center justify-center text-center px-6">
       <h1 className="text-6xl font-black text-gray-200 mb-2">404</h1>
@@ -38,7 +37,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <IdeasHeader />
-        <main className="bg-gray-50 min-h-screen">
+        <main className="bg-gray-50 min-h-[calc(100dvh-5rem)] overflow-auto">
           {children}
         </main>
         <TanStackDevtools

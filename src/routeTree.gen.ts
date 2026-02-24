@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as RegisterIndexRouteImport } from './routes/register/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as IdeasIndexRouteImport } from './routes/ideas/index'
-import { Route as LayoutsMainLayoutRouteImport } from './routes/layouts/mainLayout'
 import { Route as IdeasIdeasIDIndexRouteImport } from './routes/ideas/$ideasID/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -36,11 +35,6 @@ const IdeasIndexRoute = IdeasIndexRouteImport.update({
   path: '/ideas/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LayoutsMainLayoutRoute = LayoutsMainLayoutRouteImport.update({
-  id: '/layouts/mainLayout',
-  path: '/layouts/mainLayout',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IdeasIdeasIDIndexRoute = IdeasIdeasIDIndexRouteImport.update({
   id: '/ideas/$ideasID/',
   path: '/ideas/$ideasID/',
@@ -49,7 +43,6 @@ const IdeasIdeasIDIndexRoute = IdeasIdeasIDIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/layouts/mainLayout': typeof LayoutsMainLayoutRoute
   '/ideas/': typeof IdeasIndexRoute
   '/login/': typeof LoginIndexRoute
   '/register/': typeof RegisterIndexRoute
@@ -57,7 +50,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/layouts/mainLayout': typeof LayoutsMainLayoutRoute
   '/ideas': typeof IdeasIndexRoute
   '/login': typeof LoginIndexRoute
   '/register': typeof RegisterIndexRoute
@@ -66,7 +58,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/layouts/mainLayout': typeof LayoutsMainLayoutRoute
   '/ideas/': typeof IdeasIndexRoute
   '/login/': typeof LoginIndexRoute
   '/register/': typeof RegisterIndexRoute
@@ -74,25 +65,12 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/layouts/mainLayout'
-    | '/ideas/'
-    | '/login/'
-    | '/register/'
-    | '/ideas/$ideasID/'
+  fullPaths: '/' | '/ideas/' | '/login/' | '/register/' | '/ideas/$ideasID/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/layouts/mainLayout'
-    | '/ideas'
-    | '/login'
-    | '/register'
-    | '/ideas/$ideasID'
+  to: '/' | '/ideas' | '/login' | '/register' | '/ideas/$ideasID'
   id:
     | '__root__'
     | '/'
-    | '/layouts/mainLayout'
     | '/ideas/'
     | '/login/'
     | '/register/'
@@ -101,7 +79,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LayoutsMainLayoutRoute: typeof LayoutsMainLayoutRoute
   IdeasIndexRoute: typeof IdeasIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   RegisterIndexRoute: typeof RegisterIndexRoute
@@ -138,13 +115,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IdeasIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/layouts/mainLayout': {
-      id: '/layouts/mainLayout'
-      path: '/layouts/mainLayout'
-      fullPath: '/layouts/mainLayout'
-      preLoaderRoute: typeof LayoutsMainLayoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/ideas/$ideasID/': {
       id: '/ideas/$ideasID/'
       path: '/ideas/$ideasID'
@@ -157,7 +127,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LayoutsMainLayoutRoute: LayoutsMainLayoutRoute,
   IdeasIndexRoute: IdeasIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   RegisterIndexRoute: RegisterIndexRoute,

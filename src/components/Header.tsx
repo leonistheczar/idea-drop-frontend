@@ -1,7 +1,8 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 const IdeasHeader = () => {
+  const location = useLocation();
   return (
-    <nav className="p-3 flex justify-around items-center shadow-md">
+    <nav className="p-3 flex sm:justify-around justify-between items-center shadow-md">
       <Link className="flex items-center" to="/">
         <img
           className="w-12 h-12"
@@ -11,11 +12,11 @@ const IdeasHeader = () => {
         <h1 className="font-bold text-2xl">IdeasDrop</h1>
       </Link>
       <div>
-        <Link to="/ideas"><p className="font-semibold">Ideas</p></Link>
+        <Link to="/ideas"><p className="text-slate-500 font-semibold text-lg transition hover:text-black">Ideas</p></Link>
       </div>
-      <div className="flex gap-x-6">
-        <Link to="/login" className="px-2 py-1 rounded-md transition hover:bg-slate-200">Login</Link>
-        <Link to="/register" className="bg-slate-200 px-2 py-1 rounded-md font-semibold">Register</Link>
+      <div className="flex sm:gap-x-2">
+        <Link to="/login" className={`${location.pathname === "/login" ? "bg-slate-200 font-semibold" : "hover:bg-slate-200"} px-2 py-1 rounded-md transition`}>Login</Link>
+        <Link to="/register" className={`${location.pathname === "/register" ? "bg-slate-200 font-semibold" : "hover:bg-slate-200"} px-2 py-1 rounded-md`}>Register</Link>
       </div>
     </nav>
   );
