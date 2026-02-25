@@ -1,4 +1,3 @@
-// components/FloatingInput.tsx
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -18,7 +17,7 @@ export function FloatingInput({ label, id, ...props }: FloatingInputProps) {
       />
       <label
         htmlFor={id}
-        className="absolute left-3 top-3 text-sm text-gray-400 transition-all
+        className="absolute left-3 top-3 text-sm text-gray-400 transition-all duration-100
           peer-focus:-top-3 peer-focus:text-sm peer-focus:text-gray-700 peer-focus:font-semibold peer-focus:bg-white peer-focus:px-1
           peer-[:not(:placeholder-shown)]:-top-3 peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:text-gray-700 peer-[:not(:placeholder-shown)]:bg-white peer-[:not(:placeholder-shown)]:px-1"
       >
