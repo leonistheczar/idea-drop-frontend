@@ -7,6 +7,7 @@ type FloatingInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export function FloatingInput({ label, id, ...props }: FloatingInputProps) {
+
   return (
     <div className="relative">
       <input

@@ -12,11 +12,28 @@ const IdeasHeader = () => {
         <h1 className="font-bold text-2xl">IdeasDrop</h1>
       </Link>
       <div>
-        <Link to="/ideas"><p className="text-slate-500 font-semibold text-lg transition hover:text-black">Ideas</p></Link>
+        <Link to="/ideas">
+          <p className="text-slate-500 font-semibold text-lg transition hover:text-black">
+            Ideas
+          </p>
+        </Link>
       </div>
       <div className="flex sm:gap-x-2">
-        <Link to="/login" className={`${location.pathname === "/login" ? "bg-slate-200 font-semibold" : "hover:bg-slate-200"} px-2 py-1 rounded-md transition`}>Login</Link>
-        <Link to="/register" className={`${location.pathname === "/register" ? "bg-slate-200 font-semibold" : "hover:bg-slate-200"} px-2 py-1 rounded-md`}>Register</Link>
+        <Link
+          to={location.pathname === "/login" ? "/login" : "/"}
+          className={`
+    px-2 py-1 rounded-md transition
+    ${location.pathname === "/login" ? "bg-slate-200 font-semibold" : location.pathname === "/user" ? "text-red-600 hover:bg-red-100": "hover:bg-slate-200"}
+  `}
+        >
+          {location.pathname === "/user" ? "LogOut" : "Login"}
+        </Link>
+        <Link
+          to="/register"
+          className={`${location.pathname === "/register" ? "bg-slate-200 font-semibold" : "hover:bg-slate-200"} px-2 py-1 rounded-md`}
+        >
+          Register
+        </Link>
       </div>
     </nav>
   );

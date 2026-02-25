@@ -4,8 +4,9 @@ type ideasCardProps = {
   className: string,
   showButton: boolean,
   showHome: boolean,
+  lorem: string
 }
-const IdeasCard = ({id, className="", showButton=false, showHome=false}: ideasCardProps) => {
+const IdeasCard = ({id, lorem="", className="", showButton=false, showHome=false}: ideasCardProps) => {
     return ( 
         <div className={`p-3 rounded-md shadow-md/20 ${className}`}>
               {showHome && (
@@ -14,7 +15,9 @@ const IdeasCard = ({id, className="", showButton=false, showHome=false}: ideasCa
                 </div>
               )}
               <p>Idea # {id}</p>
-              <p className='mb-4'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolores velit animi soluta optio, quasi ut, expedita minus modi nisi facilis fuga inventore laudantium architecto nam quibusdam assumenda mollitia sint earum!</p>
+              <p className='mb-4'>{lorem}</p>
+              <h3>Tags</h3>
+              <div className="flex gap-2 my-2"><span className="p-1 text-sm bg-slate-200 rounded-sm">test</span><span className="p-1 text-sm bg-slate-200 rounded-sm">test</span><span className="p-1 text-sm bg-slate-200 rounded-sm">test</span></div>
               {showButton && <Link className='bg-blue-700 inline-block w-full text-center text-white px-4 py-2 rounded-md transition hover:bg-blue-800' to="/ideas/$ideasID" params={{ideasID: String(id)}}>View Idea</Link>}
               </div>
      );
