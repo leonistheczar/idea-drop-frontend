@@ -1,12 +1,11 @@
-import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
+import { HeadContent, Outlet, Scripts, createRootRoute, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-
 import appCss from '../styles.css?url'
 import logo from "/main-logo.svg?url"
 import IdeasHeader from '@/components/Header'
-
-export const Route = createRootRoute({
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+export const Route = createRootRouteWithContext<{queryClient: QueryClient}>()({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
@@ -27,8 +26,16 @@ export const Route = createRootRoute({
       <a href="/" className="text-xs text-blue-600 hover:underline">← Go home</a>
     </div>
   ),
-  component: () => <Outlet />,
+  component: () => <RootComponent />,
 })
+function RootComponent(){
+  const { queryClient } = Route.useRouteContext();
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+    </QueryClientProvider>
+  )
+}
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -43,7 +50,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <TanStackDevtools
           config={{ position: 'bottom-right' }}
           plugins={[{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> }]}
-        />
+          />
         <Scripts />
       </body>
     </html>

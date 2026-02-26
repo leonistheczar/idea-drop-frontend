@@ -1,16 +1,34 @@
+import api from "@/api/api";
 import { FloatingInput } from "@/components/FloatingInput";
 import { FloatingMessageInput } from "@/components/FloatingMessageInput";
 import IdeasCard from "@/components/IdeasCard";
+import type { Ideas } from "@/types";
 import { createFileRoute } from "@tanstack/react-router";
+import axios from "axios";
 import { CirclePlus, House, Lightbulb, SquarePen } from "lucide-react";
 import { useState } from "react";
-
+const fetchData = async () => {
+  try {
+    const res = await api.get("/ideas");
+    if(!res.data) throw new Error("Failed to fetch ideas");
+    return res.data;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.error("Error fetching...", error.response?.data || error.message);
+      throw error;
+    }
+  }
+}
 export const Route = createFileRoute("/user/")({
   component: RouteComponent,
+  loader: async () => fetchData()
 });
 
 function RouteComponent() {
+  const data = Route.useLoaderData();
+  const [ideas, setIdeas] = useState<Ideas[]>(data);
   const [activeTab, setActiveTab] = useState("home");
+  const slicedIdeas = ideas.slice(0,4);
   return (
     <section className="mt-4 bg-gray-50 max-w-4xl mx-auto p-4">
       <div className=" ">
@@ -136,16 +154,12 @@ function RouteComponent() {
               <div className="container py-6 px-4">
                 <h1 className="text-2xl font-semibold mb-6">Ideas</h1>
                 <div className="grid grid-cols-2 gap-3">
-                  {[1, 2, 3, 4].map((id) => (
                     <IdeasCard
-                      key={id}
-                      id={id}
-                      lorem="Lorem ipsum dolor sit amet consectetur adipiscing elit sed."
-                      className=""
-                      showButton={true}
-                      showHome={false}
-                    />
-                  ))}
+                    ideas={slicedIdeas}
+                    className=""
+                    showButton={true}
+                    showHome={false}
+                  />
                 </div>
               </div>
             )}

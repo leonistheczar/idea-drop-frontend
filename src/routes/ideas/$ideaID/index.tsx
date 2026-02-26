@@ -1,6 +1,7 @@
 import api from '@/api/api';
 import IdeasDetailsCard from '@/components/IdeasDetailsCard';
 import type { Ideas } from '@/types';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
 import axios from 'axios';
 import { useState } from 'react';
@@ -16,7 +17,11 @@ const fetchDataById = async (ideaID: string) => {
     }
   }
 }
-export const Route = createFileRoute('/ideas/$ideasID/')({
+const ideasQueryOptions = (ideaID: string) => queryOptions({
+  queryKey: ["ideas", ideaID],
+  queryFn: () => fetchDataById(ideaID)
+})
+export const Route = createFileRoute('/ideas/$ideaID/')({
   head: () => ({
     meta:[
       {
@@ -25,19 +30,20 @@ export const Route = createFileRoute('/ideas/$ideasID/')({
     ],
   }),
   component: ideasDetails,
-  loader: async ({ params }) => {
-    return fetchDataById(params.ideasID);
+  loader: async ({ params, context: { queryClient } }) => {
+    return queryClient.ensureQueryData(ideasQueryOptions(params.ideaID))
   }
 })
 
 function ideasDetails() {
-  const data = Route.useLoaderData();
-  const [idea, setIdea] = useState<Ideas>(data);
-  console.log(idea);
+  const { ideaID } = Route.useParams();
+  const {data:idea, status, fetchStatus} = useSuspenseQuery(ideasQueryOptions(ideaID));
+  console.log(status, fetchStatus)
+  const [fetchIdea, setFetchIdea] = useState<Ideas>(idea);
   return (
     <section className='p-6 sm:p-8'>
       <div className="container rounded-lg max-w-5xl p-2 mx-auto">
-        <IdeasDetailsCard idea={idea} className={"shadow-none"} showHome={true} />
+        <IdeasDetailsCard idea={fetchIdea} className={"shadow-none"} showHome={true} />
       </div>
     </section>
   )

@@ -8,6 +8,7 @@ type ideasCardProps = {
 };
 
 const IdeasDetailsCard = ({ idea, className = "", showHome = false }: ideasCardProps) => {
+  const ideasDate = (new Date(idea.createdAt).toISOString().slice(0,10));
   return (
     <>
       {idea && (
@@ -45,7 +46,7 @@ const IdeasDetailsCard = ({ idea, className = "", showHome = false }: ideasCardP
           )}
 
           <p className="text-gray-400 text-xs mt-4">
-            Created at: {new Date(idea.createdAt).toLocaleDateString()}
+            Created at: {ideasDate}
           </p>
         </div>
       )}
