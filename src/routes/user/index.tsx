@@ -24,7 +24,7 @@ export const Route = createFileRoute("/user/")({
   },
 });
 function RouteComponent() {
-  const naviagate = useNavigate();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data } = useSuspenseQuery(ideasQueryOptions());
   const [ideas, setIdeas] = useState<Ideas[]>(data);
@@ -42,7 +42,7 @@ function RouteComponent() {
     mutationFn: postIdea,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: [ideas]}),
-      naviagate({ to: "/" });
+      navigate({ to: "/" });
     },
   });
   // FORM SUBMIT FN

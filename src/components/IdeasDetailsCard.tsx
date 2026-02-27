@@ -9,7 +9,6 @@ type ideasCardProps = {
   pendingState: boolean,
   deleteMutate: (id: string) => Promise<unknown>  
 };
-
 const IdeasDetailsCard = ({ idea, id, className = "", showHome = false, pendingState, deleteMutate }: ideasCardProps) => {
   const ideasDate = (new Date(idea.createdAt).toISOString().slice(0,10));
   const handleDelete = async () => {
@@ -57,8 +56,13 @@ const IdeasDetailsCard = ({ idea, id, className = "", showHome = false, pendingS
           <p className="text-gray-400 text-xs mt-4">
             Created at: {ideasDate}
           </p>
+          <div className="flex items-center gap-x-2 mt-2">
           <div>
-            <button onClick={handleDelete} className="mt-2 p-1 text-sm text-white bg-red-600 transition duration-150 hover:bg-red-700 hover:cursor-pointer rounded-md disabled:opacity-50">{pendingState ? "Deleting..." : "Delete"}</button>
+            <button onClick={handleDelete} className=" p-1 text-sm text-white bg-red-600 transition duration-150 hover:bg-red-700 hover:cursor-pointer rounded-md disabled:opacity-50">{pendingState ? "Deleting..." : "Delete"}</button>
+          </div>
+          <div>
+            <Link to="/ideas/$ideaID/edit" params={{ideaID: String(id)}} className="mt-2 p-1 text-sm text-white bg-blue-600 transition duration-150 hover:bg-blue-700 hover:cursor-pointer rounded-md disabled:opacity-50">Edit idea</Link>
+          </div>
           </div>
         </div>
       )}

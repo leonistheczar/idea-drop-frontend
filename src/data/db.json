@@ -71,6 +71,19 @@
         "ai"
       ],
       "createdAt": "2025-04-24T13:10:00.000Z"
+    },
+    {
+      "title": "Testing Idea Update - Confirmed",
+      "summary": "This is a test idea for UPDATE - Confirmed",
+      "description": "This is the idea test for UPDATE - Confirmed",
+      "tags": [
+        "idea",
+        "test",
+        "UPDATE",
+        "confirmed"
+      ],
+      "createdAt": "2026-02-27T17:54:52.834Z",
+      "id": "8290"
     }
   ]
 }
