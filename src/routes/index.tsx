@@ -1,29 +1,22 @@
-import api from '@/api/api';
+import { fetchData } from '@/api/api';
 import LatestIdeasCard from '@/components/LatestIdeasCard'
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router'
-import axios from 'axios';
 import { useState } from 'react';
-const fetchData = async () => {
-  try {
-    const res = await api.get("/ideas");
-    if(!res.data) throw new Error("Failed to fetch ideas");
-    return res.data;
-  } catch (error) {
-    if(axios.isAxiosError(error)){
-      console.error("Error fetching...", error.response?.data || error.message);
-      throw error;
-    }
-  }
-}
+const ideasQueryOptions = () => queryOptions({
+  queryKey: ["ideas"],
+  queryFn: () => fetchData()
+})
 export const Route = createFileRoute('/')({ 
   component: App,
-  loader: () => {
-    return fetchData();
-  } 
+  loader: async ({context: {queryClient}}) => {
+    return queryClient.ensureQueryData(ideasQueryOptions());
+  }
 })
 function App() {
-  const data = Route.useLoaderData();
-  const [ideas, setIdeas] = useState(data);
+  const { data } = useSuspenseQuery(ideasQueryOptions());
+  const latestIdeas = [...data].sort((a,b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0,3);
+  const [ideas, setIdeas] = useState(latestIdeas);
   return (
       <section className='px-8 py-10'>
         <div className="container shadow-lg rounded-lg grid sm:grid-cols-2 gap-6 max-w-5xl p-6 bg-white mx-auto">
@@ -46,3 +39,4 @@ function App() {
       </section>
   )
 }
+

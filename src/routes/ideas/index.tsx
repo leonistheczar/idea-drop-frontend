@@ -1,21 +1,13 @@
-import api from "@/api/api";
+import { fetchData } from "@/api/api";
 import IdeasCard from "@/components/IdeasCard";
 import type { Ideas } from "@/types";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import axios from "axios";
 import { useState } from "react";
-const fetchData = async () => {
-  try {
-    const res = await api.get("/ideas");
-    if(!res.data) throw new Error("Failed to fetch ideas");
-    return res.data;
-  } catch (error) {
-    if(axios.isAxiosError(error)){
-      console.error("Error fetching...", error.response?.data || error.message);
-      throw error;
-    }
-  }
-}
+const ideasQueryOptions = () => queryOptions({
+  queryKey: ["ideas"],
+  queryFn: () => fetchData()
+})
 export const Route = createFileRoute("/ideas/")({
   head: () => ({
     meta: [
@@ -25,13 +17,13 @@ export const Route = createFileRoute("/ideas/")({
     ],
   }),
   component: IdeasPage,
-  loader: () => {
-    return fetchData();
+  loader: async ({context: {queryClient}}) => {
+    return queryClient.ensureQueryData(ideasQueryOptions());
   }
 });
 
 function IdeasPage() {
-  const data = Route.useLoaderData();
+  const { data } = useSuspenseQuery(ideasQueryOptions());
   const [ideas, setIdeas] = useState<Ideas[]>(data);
   return (
     <section className="px-6 sm:px-8 py-10">
