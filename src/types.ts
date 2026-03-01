@@ -4,5 +4,6 @@ export type Ideas = {
     summary: string,
     description: string,
     tags: string[],
-    createdAt: string
+    createdAt?: string,
+    updatedAt?: string
 }

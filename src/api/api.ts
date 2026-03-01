@@ -1,6 +1,6 @@
 import api from "@/lib/api";
 import type { Ideas } from "@/types";
-
+// GET - by ID
 export const fetchDatabyID = async (ideasID: string) => {
   try {
     const res = await api.get(`/ideas/${ideasID}/`);
@@ -9,6 +9,7 @@ export const fetchDatabyID = async (ideasID: string) => {
     console.error("Failed to fetch idea by id");
   }
 };
+// GET IDEAS
 export const fetchData = async () => {
   try {
     const res = await api.get("/ideas");
@@ -17,6 +18,7 @@ export const fetchData = async () => {
     console.error("Failed to fetch ideas");
   }
 };
+// POST IDEA - NEW
 export const postIdea = async (newIdea: {
   title: string;
   summary: string;
@@ -34,6 +36,7 @@ export const postIdea = async (newIdea: {
     throw error;
   }
 };
+// DELETE IDEA
 export const deleteIdea = async (ideaID: string): Promise<void> => {
   try {
     await api.delete(`ideas/${ideaID}`);
@@ -42,6 +45,7 @@ export const deleteIdea = async (ideaID: string): Promise<void> => {
     throw error;
   }
 };
+// UPDATE IDEA
 export const updateIdea = async ({
   ideaID,
   ...newIdea
@@ -55,7 +59,7 @@ export const updateIdea = async ({
   try {
     const res = await api.put(`/ideas/${ideaID}`, {
       ...newIdea,
-      createdAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
     });
     return res.data;
   } catch (error) {

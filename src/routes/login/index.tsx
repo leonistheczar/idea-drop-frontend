@@ -12,7 +12,6 @@ function IdeasLogin() {
   return (
     <section className="flex items-center justify-center mt-4 bg-gray-50">
       <div className="w-full max-w-4xl bg-white rounded-xl shadow-sm border border-gray-100 grid sm:grid-cols-2">
-        {/* Left: Brand */}
         <div className="flex flex-col justify-between p-10">
           <div>
             <img className="w-24 h-24" src="/main-logo.svg" alt="IdeasDrop" />
@@ -28,8 +27,6 @@ function IdeasLogin() {
             &copy; {new Date().getFullYear()} IdeasDrop
           </p>
         </div>
-
-        {/* Right: Form */}
         <div className="flex flex-col justify-center p-10">
           <div className="flex items-center gap-2 mb-6 text-2xl">
             <User size={24} className="text-gray-700" />

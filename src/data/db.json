@@ -1,16 +1,16 @@
 {
   "ideas": [
     {
-      "id": "1",
-      "title": "Airbnb for Garages",
-      "summary": "Rent out your garage for storage or parking.",
+      "title": "Airbnb for Garage",
+      "summary": "Rent out your garage for storage or parking",
       "description": "This platform allows homeowners to monetize unused garage space by offering it for short- or long-term storage, parking, or even micro-offices. Think Airbnb, but for underutilized residential garages. It could also provide insurance, keyless access, and a rating system for trust and safety.",
       "tags": [
         "real estate",
         "marketplace",
         "sharing economy"
       ],
-      "createdAt": "2025-04-27T10:00:00.000Z"
+      "createdAt": "2026-03-01T09:54:41.623Z",
+      "id": "1"
     },
     {
       "id": "2",
@@ -25,16 +25,18 @@
       "createdAt": "2025-04-28T14:30:00.000Z"
     },
     {
-      "id": "3",
       "title": "Micro-SaaS for Freelancers",
       "summary": "A personal dashboard to manage freelance work.",
       "description": "A lightweight SaaS platform that helps freelancers track their clients, invoices, contracts, and income in one place. Built specifically for solopreneurs who don’t need bulky CRM tools but want visibility into their business and finances. Includes tax estimates, recurring invoice reminders, and expense logging.",
       "tags": [
         "freelance",
         "saas",
-        "tools"
+        "tools",
+        "dashboard",
+        "micro-services"
       ],
-      "createdAt": "2025-04-29T09:15:00.000Z"
+      "createdAt": "2026-03-01T09:57:15.886Z",
+      "id": "3"
     },
     {
       "id": "4",
@@ -71,19 +73,6 @@
         "ai"
       ],
       "createdAt": "2025-04-24T13:10:00.000Z"
-    },
-    {
-      "title": "Testing Idea Update - Confirmed",
-      "summary": "This is a test idea for UPDATE - Confirmed",
-      "description": "This is the idea test for UPDATE - Confirmed",
-      "tags": [
-        "idea",
-        "test",
-        "UPDATE",
-        "confirmed"
-      ],
-      "createdAt": "2026-02-27T17:54:52.834Z",
-      "id": "8290"
     }
   ]
 }

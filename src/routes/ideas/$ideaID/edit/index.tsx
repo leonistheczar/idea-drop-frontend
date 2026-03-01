@@ -2,39 +2,71 @@ import { fetchDatabyID, updateIdea } from '@/api/api'
 import { FloatingInput } from '@/components/FloatingInput'
 import { FloatingMessageInput } from '@/components/FloatingMessageInput'
 import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
-const ideasQueryOptions = (ideaID: string) => queryOptions({
-    queryKey: ["ideas", ideaID],
-    queryFn: () => fetchDatabyID(ideaID)
+import { createFileRoute, useBlocker, useNavigate } from '@tanstack/react-router'
+import { useEffect, useMemo, useState } from 'react'
+
+const ideasQueryOptions = (ideaID: string) =>
+  queryOptions({
+    queryKey: ['ideas', ideaID],
+    queryFn: () => fetchDatabyID(ideaID),
   })
+
 export const Route = createFileRoute('/ideas/$ideaID/edit/')({
   component: RouteComponent,
-  loader: async ({params, context: { queryClient }}) => {
+  loader: async ({ params, context: { queryClient } }) => {
     return queryClient.ensureQueryData(ideasQueryOptions(params.ideaID))
-  }
+  },
 })
 
+const UNLOAD_MESSAGE = 'You have unsaved changes. Are you sure you want to leave?'
+
 function RouteComponent() {
-    const queryClient = useQueryClient()
-    const navigate = useNavigate()
-    const { ideaID } = Route.useParams()
-    const { data: idea } = useSuspenseQuery(ideasQueryOptions(ideaID))
-  
-    const [editTitle, setEditTitle] = useState(idea.title)
-    const [editSummary, setEditSummary] = useState(idea.summary)
-    const [editDesc, setEditDesc] = useState(idea.description)
-    const [editTags, setEditTags] = useState(idea.tags.join(', '))
-  
-    const { mutateAsync: updateMutate, isPending } = useMutation({
-      mutationFn: updateIdea, 
-      onSuccess: (data) => {
-        queryClient.invalidateQueries({ queryKey: ['ideas'] })
-        queryClient.setQueryData(['ideas', ideaID], data)     
-        navigate({ to: '/' })
-      },
-    })
-  
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+  const { ideaID } = Route.useParams()
+  const { data: idea } = useSuspenseQuery(ideasQueryOptions(ideaID))
+
+  const [editTitle, setEditTitle] = useState(idea.title)
+  const [editSummary, setEditSummary] = useState(idea.summary)
+  const [editDesc, setEditDesc] = useState(idea.description)
+  const [editTags, setEditTags] = useState(idea.tags.join(', '))
+
+  const isDirty = useMemo(() => {
+    const tagsStr = idea.tags.join(', ')
+    return (
+      editTitle !== idea.title ||
+      editSummary !== idea.summary ||
+      editDesc !== idea.description ||
+      editTags !== tagsStr
+    )
+  }, [idea, editTitle, editSummary, editDesc, editTags])
+
+  useBlocker({
+    shouldBlockFn: () => {
+      if (!isDirty) return false
+      return !confirm(UNLOAD_MESSAGE)
+    },
+  })
+
+  useEffect(() => {
+    if (!isDirty) return
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault()
+      e.returnValue = UNLOAD_MESSAGE
+      return UNLOAD_MESSAGE
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [isDirty])
+
+  const { mutateAsync: updateMutate, isPending } = useMutation({
+    mutationFn: updateIdea,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['ideas'] })
+      queryClient.setQueryData(['ideas', ideaID], data)
+      navigate({ to: '/' })
+    },
+  })
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
       e.preventDefault()
       if (!editTitle.trim() || !editSummary.trim() || !editDesc.trim()) {
@@ -98,10 +130,10 @@ function RouteComponent() {
             />
             <button
               type="submit"
-              disabled={isPending} // ✅ disable while submitting
+              disabled={isPending}
               className="flex items-center justify-center gap-2 mt-1 p-3 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-100 cursor-pointer"
             >
-              {isPending ? 'Updating...' : 'Update idea'} {/* ✅ loading state */}
+              {isPending ? 'Updating...' : 'Update idea'}
             </button>
           </form>
         </div>

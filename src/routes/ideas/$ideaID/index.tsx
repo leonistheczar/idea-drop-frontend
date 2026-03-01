@@ -1,43 +1,55 @@
 import IdeasDetailsCard from '@/components/IdeasDetailsCard';
-import type { Ideas } from '@/types';
-import { queryOptions, useMutation, useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react';
+import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { deleteIdea, fetchDatabyID } from '@/api/api';
-const ideasQueryOptions = (ideaID: string) => queryOptions({
-  queryKey: ["ideas", ideaID],
-  queryFn: () => fetchDatabyID(ideaID)
-})
+
+const ideasQueryOptions = (ideaID: string) =>
+  queryOptions({
+    queryKey: ['ideas', ideaID],
+    queryFn: () => fetchDatabyID(ideaID),
+  });
+
 export const Route = createFileRoute('/ideas/$ideaID/')({
-  head: () => ({
-    meta:[
+  loader: async ({ params, context: { queryClient } }) => {
+    return queryClient.ensureQueryData(ideasQueryOptions(params.ideaID));
+  },
+  head: ({ loaderData }) => ({
+    meta: [
       {
-        title: "Ideas by ID - IdeasDrop"
-      }
+        title: `${loaderData.title} - IdeasDrop`,
+      },
     ],
   }),
-  component: ideasDetails,
-  loader: async ({ params, context: { queryClient } }) => {
-    return queryClient.ensureQueryData(ideasQueryOptions(params.ideaID))
-  }
-})
-function ideasDetails() {
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { ideaID } = Route.useParams();
-  const {data:idea} = useSuspenseQuery(ideasQueryOptions(ideaID));
-  const [fetchIdea, setFetchIdea] = useState<Ideas>(idea);
-  const { mutateAsync:deleteMutate, isPending } = useMutation({
-    mutationFn: (ideaID: string) => deleteIdea(ideaID),
+  const { data: idea } = useSuspenseQuery(ideasQueryOptions(ideaID));
+
+  const { mutateAsync: deleteMutate, isPending } = useMutation({
+    mutationFn: (id: string) => deleteIdea(id),
     onSuccess: () => {
-      navigate({to: "/"});
-    }
-  })
+      queryClient.invalidateQueries({ queryKey: ['ideas'] });
+      queryClient.removeQueries({ queryKey: ['ideas', ideaID] });
+      navigate({ to: '/' });
+    },
+  });
+
   return (
-    <section className='p-6 sm:p-8'>
+    <section className="p-6 sm:p-8">
       <div className="container rounded-lg max-w-5xl p-2 mx-auto">
-        <IdeasDetailsCard id={ideaID} pendingState={isPending} deleteMutate={deleteMutate} idea={fetchIdea} className={"shadow-none"} showHome={true} />
+        <IdeasDetailsCard
+          id={ideaID}
+          pendingState={isPending}
+          deleteMutate={deleteMutate}
+          idea={idea}
+          className="shadow-none"
+          showHome={true}
+        />
       </div>
     </section>
-  )
+  );
 }
-
