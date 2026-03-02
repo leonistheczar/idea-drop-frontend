@@ -19,6 +19,7 @@ const IdeasDetailsCard = ({
   deleteMutate,
 }: ideasCardProps) => {
   const ideasDate = idea.createdAt?.slice(0,10);
+  console.log(ideasDate);
   const handleDelete = async () => {
     const confirmDeletion = confirm("Are you sure you want to delete?");
     if (confirmDeletion) {
@@ -41,7 +42,7 @@ const IdeasDetailsCard = ({
         </div>
       )}
 
-      <p className="text-gray-500 text-sm mb-1">Idea # {idea.id}</p>
+      <p className="text-gray-500 text-sm mb-1">Idea # {idea._id}</p>
       <h2 className="text-xl font-bold text-gray-900 mb-2">{idea.title}</h2>
       <p className="text-gray-700 mb-3">{idea.summary}</p>
       <p className="text-gray-600 mb-4">{idea.description}</p>

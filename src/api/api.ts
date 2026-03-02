@@ -3,10 +3,11 @@ import type { Ideas } from "@/types";
 // GET - by ID
 export const fetchDatabyID = async (ideasID: string) => {
   try {
-    const res = await api.get(`/ideas/${ideasID}/`);
+    const res = await api.get(`/ideas/${ideasID}`);
     return res.data;
   } catch (error) {
     console.error("Failed to fetch idea by id");
+    throw error;
   }
 };
 // GET IDEAS
@@ -16,6 +17,7 @@ export const fetchData = async () => {
     return res.data;
   } catch (error) {
     console.error("Failed to fetch ideas");
+    throw error;
   }
 };
 // POST IDEA - NEW
@@ -39,7 +41,7 @@ export const postIdea = async (newIdea: {
 // DELETE IDEA
 export const deleteIdea = async (ideaID: string): Promise<void> => {
   try {
-    await api.delete(`ideas/${ideaID}`);
+    await api.delete(`/ideas/${ideaID}`);
   } catch (error) {
     console.error("Failed to delete");
     throw error;

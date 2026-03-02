@@ -16,7 +16,7 @@ const IdeasCard = ({
     <>
       {ideas.map((idea) => (
         <div
-          key={idea.id}
+          key={idea._id}
           className={`p-3 rounded-md shadow-md/20 ${className}`}
         >
           {showHome && (
@@ -34,7 +34,7 @@ const IdeasCard = ({
             <Link
               className="bg-blue-700 inline-block w-full text-center text-white px-4 py-2 rounded-md transition hover:bg-blue-800"
               to={`/ideas/$ideaID`}
-              params={{ ideaID: String(idea.id) }}
+              params={{ ideaID: String(idea._id) }}
             >
               View Idea
             </Link>

@@ -41,7 +41,7 @@ function RouteComponent() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: postIdea,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: [ideas]}),
+      queryClient.invalidateQueries({queryKey: ["ideas", ideas]}),
       navigate({ to: "/" });
     },
   });

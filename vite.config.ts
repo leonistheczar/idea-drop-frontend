@@ -17,7 +17,7 @@ const config = defineConfig({
   ],
   server:{
     open:true,
-    host: true
+    host: true,
   }
 })
 
