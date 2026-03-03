@@ -1,7 +1,6 @@
 import { FloatingInput } from "@/components/FloatingInput";
 import { FloatingMessageInput } from "@/components/FloatingMessageInput";
 import IdeasCard from "@/components/IdeasCard";
-import type { Ideas } from "@/types";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { CirclePlus, House, Lightbulb, SquarePen } from "lucide-react";
 import { useState } from "react";
@@ -27,9 +26,8 @@ function RouteComponent() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { data } = useSuspenseQuery(ideasQueryOptions());
-  const [ideas, setIdeas] = useState<Ideas[]>(data);
   const [activeTab, setActiveTab] = useState("home");
-  const slicedIdeas = ideas.slice(0, 4);
+  const slicedIdeas = data.slice(0, 4);
 
   // FORM STATES (NEW)
   const [newTitle, setNewTitle] = useState("");
@@ -41,7 +39,7 @@ function RouteComponent() {
   const { mutateAsync, isPending } = useMutation({
     mutationFn: postIdea,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ["ideas", ideas]}),
+      queryClient.invalidateQueries({queryKey: ["ideas"]}),
       navigate({ to: "/" });
     },
   });

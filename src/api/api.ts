@@ -11,9 +11,11 @@ export const fetchDatabyID = async (ideasID: string) => {
   }
 };
 // GET IDEAS
-export const fetchData = async () => {
+export const fetchData = async (limit?: number) => {
   try {
-    const res = await api.get("/ideas");
+    const res = await api.get("/ideas", {
+      params: limit ? {_limit: limit} : {},
+    });
     return res.data;
   } catch (error) {
     console.error("Failed to fetch ideas");

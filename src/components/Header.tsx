@@ -20,7 +20,7 @@ const IdeasHeader = () => {
       </div>
       <div className="flex sm:gap-x-2">
         <Link
-          to={location.pathname === "/login" ? "/login" : "/"}
+          to="/login"
           className={`
     px-2 py-1 rounded-md transition
     ${location.pathname === "/login" ? "bg-slate-200 font-semibold" : location.pathname === "/user" ? "text-red-600 hover:bg-red-100": "hover:bg-slate-200"}
