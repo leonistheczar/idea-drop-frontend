@@ -4,26 +4,29 @@ import IdeasCard from "@/components/IdeasCard";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { CirclePlus, House, Lightbulb, SquarePen } from "lucide-react";
 import { useState } from "react";
-import { fetchData, postIdea } from "@/api/api";
+import { fetchData, postIdea } from "@/api/ideas";
 import {
   queryOptions,
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
+import { useAuth } from "@/context/authContext";
 const ideasQueryOptions = () =>
   queryOptions({
     queryKey: ["ideas"],
     queryFn: () => fetchData(),
   });
 export const Route = createFileRoute("/user/")({
-  component: RouteComponent,
+  component: UserPage,
   loader: async ({ context: { queryClient } }) => {
     return queryClient.ensureQueryData(ideasQueryOptions());
   },
 });
-function RouteComponent() {
+function UserPage() {
   const navigate = useNavigate();
+  const {user} = useAuth();
+  console.log(user);
   const queryClient = useQueryClient();
   const { data } = useSuspenseQuery(ideasQueryOptions());
   const [activeTab, setActiveTab] = useState("home");
@@ -126,7 +129,7 @@ function RouteComponent() {
           {activeTab === "home" && (
             <div className=" py-6 px-4">
               <h1 className="text-2xl text-center font-semibold mb-6">
-                Hi, Alex 👋
+                Hi, {user?.name} 👋
               </h1>
               <div className="flex flex-col items-center rounded-lg shadow-sm border border-gray-300 p-4">
                 <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">

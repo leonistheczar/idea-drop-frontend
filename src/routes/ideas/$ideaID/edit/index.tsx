@@ -1,4 +1,4 @@
-import { fetchDatabyID, updateIdea } from '@/api/api'
+import { fetchDatabyID, updateIdea } from '@/api/ideas'
 import { FloatingInput } from '@/components/FloatingInput'
 import { FloatingMessageInput } from '@/components/FloatingMessageInput'
 import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'

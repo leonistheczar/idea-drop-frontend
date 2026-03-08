@@ -1,4 +1,4 @@
-import { HeadContent, Outlet, Scripts, createRootRoute, createRootRouteWithContext } from '@tanstack/react-router'
+import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TanStackDevtools } from '@tanstack/react-devtools'
@@ -70,6 +70,7 @@ function RootComponent(){
   return (
     <AuthProvider>
     <QueryClientProvider client={queryClient}>
+      <IdeasHeader />
       <Outlet />
       <TanStackDevtools
         config={{ position: 'bottom-right' }}
@@ -89,7 +90,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <IdeasHeader />
         <main className="bg-gray-50 min-h-[calc(100dvh-5rem)] overflow-auto">
           {children}
         </main>

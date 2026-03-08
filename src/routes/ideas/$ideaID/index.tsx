@@ -1,7 +1,7 @@
 import IdeasDetailsCard from '@/components/IdeasDetailsCard';
 import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { deleteIdea, fetchDatabyID } from '@/api/api';
+import { deleteIdea, fetchDatabyID } from '@/api/ideas';
 
 const ideasQueryOptions = (ideaID: string) =>
   queryOptions({

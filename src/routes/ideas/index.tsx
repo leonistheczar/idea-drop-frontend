@@ -1,9 +1,7 @@
-import { fetchData } from "@/api/api";
+import { fetchData } from "@/api/ideas";
 import IdeasCard from "@/components/IdeasCard";
-import type { Ideas } from "@/types";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 const ideasQueryOptions = () => queryOptions({
   queryKey: ["ideas"],
   queryFn: () => fetchData()

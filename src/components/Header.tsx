@@ -1,6 +1,10 @@
+import { useAuth } from "@/context/authContext";
 import { Link, useLocation } from "@tanstack/react-router";
+import { CirclePlus } from "lucide-react";
 const IdeasHeader = () => {
   const location = useLocation();
+  const { user } = useAuth();
+  console.log(user);
   return (
     <nav className="p-3 flex sm:justify-around justify-between items-center shadow-md">
       <Link className="flex items-center" to="/">
@@ -11,22 +15,37 @@ const IdeasHeader = () => {
         />
         <h1 className="font-bold text-2xl">IdeasDrop</h1>
       </Link>
-      <div>
+      <div className="flex items-center gap-x-4">
         <Link to="/ideas">
           <p className="text-slate-500 font-semibold text-lg transition hover:text-black">
             Ideas
           </p>
         </Link>
+        {user && 
+        <Link to="/user">
+          <p className="flex items-center gap-x-1 bg-blue-600 text-slate-100 p-1 rounded-md font-semibold text-sm transition hover:bg-blue-700">
+          <span>New Idea </span><CirclePlus size={18} strokeWidth={2} />
+          </p>
+        </Link>
+        }
       </div>
-      <div className="flex sm:gap-x-2">
+      <div className="flex items-center sm:gap-x-2">
+        {user ? (
+          <>
+          <p>Welcome, {user.name}</p>          
         <Link
           to="/login"
-          className={`
-    px-2 py-1 rounded-md transition
-    ${location.pathname === "/login" ? "bg-slate-200 font-semibold" : location.pathname === "/user" ? "text-red-600 hover:bg-red-100": "hover:bg-slate-200"}
-  `}
+          className={`px-2 py-1 rounded-md transition ${location.pathname === "/login" && user === null ? "bg-slate-200 font-semibold" : user != null ? "text-red-600 hover:bg-red-100" : "hover:bg-slate-200"}`}
         >
-          {location.pathname === "/user" ? "LogOut" : "Login"}
+          {user != null ? "LogOut" : "Login"}
+        </Link>
+          </>
+        ) : <>
+        <Link
+          to="/login"
+          className={`px-2 py-1 rounded-md transition ${location.pathname === "/login" && user === null ? "bg-slate-200 font-semibold" : user != null ? "text-red-600 hover:bg-red-100" : "hover:bg-slate-200"}`}
+        >
+          {user != null ? "LogOut" : "Login"}
         </Link>
         <Link
           to="/register"
@@ -34,6 +53,8 @@ const IdeasHeader = () => {
         >
           Register
         </Link>
+        </>
+        }
       </div>
     </nav>
   );
