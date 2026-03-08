@@ -7,6 +7,7 @@ import logo from "/main-logo.svg?url"
 import IdeasHeader from '@/components/Header'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
+import { AuthProvider } from '@/context/authContext';
 
 export const Route = createRootRouteWithContext<{queryClient: QueryClient}>()({
   head: () => ({
@@ -67,9 +68,17 @@ function RootErrorComponent({ error, reset }: { error: Error; reset: () => void 
 function RootComponent(){
   const { queryClient } = Route.useRouteContext();
   return (
+    <AuthProvider>
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <TanStackDevtools
+        config={{ position: 'bottom-right' }}
+        plugins={
+          [{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
+          { name: 'Tanstack Query', render: <ReactQueryDevtools /> }]}
+        />
     </QueryClientProvider>
+    </AuthProvider>
   )
 }
 
@@ -84,12 +93,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <main className="bg-gray-50 min-h-[calc(100dvh-5rem)] overflow-auto">
           {children}
         </main>
-        <TanStackDevtools
-          config={{ position: 'bottom-right' }}
-          plugins={
-            [{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
-             { name: 'Tanstack Query', render: <ReactQueryDevtools /> }]}
-          />
         <Scripts />
       </body>
     </html>

@@ -155,7 +155,7 @@ function RouteComponent() {
               <h1 className="text-2xl font-semibold mb-6">Create an idea</h1>
               <form
                 onSubmit={handleSubmit}
-                className="flex flex-col justify-center gap-3 max-w-2xl"
+                className="flex flex-col justify-center gap-4 max-w-2xl"
               >
                 <FloatingInput
                   onChange={(e) => setNewTitle(e.target.value)}
