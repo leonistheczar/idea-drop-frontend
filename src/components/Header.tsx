@@ -1,10 +1,28 @@
+import { logOut } from "@/api/auth";
 import { useAuth } from "@/context/authContext";
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { CirclePlus } from "lucide-react";
+import { useState } from "react";
 const IdeasHeader = () => {
   const location = useLocation();
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const {setUser, setAccessToken} = useAuth();
+  const [error, setError] = useState(null);
+  const { user, setAuthLoading } = useAuth();
   console.log(user);
+  const handleSubmit = async () => {
+    try {
+      await logOut();
+      setAccessToken(null);
+      setUser(null);
+      navigate({to: "/"})
+    } catch (err: any) {
+      setError(err.message)
+    }
+    finally{
+      setAuthLoading(false);
+    }
+  }
   return (
     <nav className="p-3 flex sm:justify-around justify-between items-center shadow-md">
       <Link className="flex items-center" to="/">
@@ -34,10 +52,14 @@ const IdeasHeader = () => {
           <>
           <p>Welcome, {user.name}</p>          
         <Link
-          to="/login"
+          to="/"
+          onClick={(e) => {e.preventDefault(); 
+            if(confirm("Are you sure you want to logout?")){
+              handleSubmit();
+              }}}
           className={`px-2 py-1 rounded-md transition ${location.pathname === "/login" && user === null ? "bg-slate-200 font-semibold" : user != null ? "text-red-600 hover:bg-red-100" : "hover:bg-slate-200"}`}
         >
-          {user != null ? "LogOut" : "Login"}
+          LogOut
         </Link>
           </>
         ) : <>
@@ -45,7 +67,7 @@ const IdeasHeader = () => {
           to="/login"
           className={`px-2 py-1 rounded-md transition ${location.pathname === "/login" && user === null ? "bg-slate-200 font-semibold" : user != null ? "text-red-600 hover:bg-red-100" : "hover:bg-slate-200"}`}
         >
-          {user != null ? "LogOut" : "Login"}
+          Login
         </Link>
         <Link
           to="/register"

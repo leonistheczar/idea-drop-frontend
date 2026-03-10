@@ -17,7 +17,7 @@ const ideasQueryOptions = () =>
     queryKey: ["ideas"],
     queryFn: () => fetchData(),
   });
-export const Route = createFileRoute("/user/")({
+export const Route = createFileRoute("/_protected/user/")({
   component: UserPage,
   loader: async ({ context: { queryClient } }) => {
     return queryClient.ensureQueryData(ideasQueryOptions());

@@ -85,7 +85,7 @@ function IdeasRegister() {
           <p className="mt-4 text-sm text-center text-gray-400">
             Already a user?{" "}
             <Link
-              to="/register"
+              to="/login"
               className="text-blue-600 font-medium hover:underline"
             >
               Log in

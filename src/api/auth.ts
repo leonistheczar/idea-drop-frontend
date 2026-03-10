@@ -20,3 +20,23 @@ export const loginUser = async(credentials: {email: string, password: string}) =
         throw new Error(message);
     }
 }
+// Logout a user
+export const logOut = async() => {
+    try {
+        const res = await api.post('/auth/logout');
+        return res.data;
+    } catch (err: any) {
+        const message = err.response?.data?.message;
+        throw new Error(message);
+    }
+}
+// Refresh access token for an existing user
+export const refreshAccessToken = async () => {
+    try {
+        const res = await api.post("/auth/refresh");
+        return res.data;
+    } catch (err: any) {
+        const message = err.response?.data?.message;
+        throw new Error(message);
+    }
+}
