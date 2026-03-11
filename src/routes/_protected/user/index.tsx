@@ -32,12 +32,16 @@ function UserPage() {
   const queryClient = useQueryClient();
   const { data } = useSuspenseQuery(ideasQueryOptions());
   const [activeTab, setActiveTab] = useState("home");
+  // User modified info
+  const totalIdeas = data.length;
   const filteredIdeas = data.filter((idea: Ideas) => idea.user === user?.id)
+  const userIdeasTotal = filteredIdeas.length;
   // FORM STATES (NEW)
   const [newTitle, setNewTitle] = useState("");
   const [newSummary, setNewSummary] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [newTags, setNewTags] = useState("");
+  const [error, setError] = useState('');
   
   // QUERY - MUTATION
   const { mutateAsync, isPending } = useMutation({
@@ -46,6 +50,9 @@ function UserPage() {
       queryClient.invalidateQueries({queryKey: ["ideas"]}),
       navigate({ to: "/ideas" });
     },
+    onError: (data) => {
+        setError(data.message);
+    }
   });
   // FORM SUBMIT FN
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -70,7 +77,7 @@ function UserPage() {
     }
   };
   return (
-    <section className="mt-4 bg-gray-50 max-w-4xl mx-auto p-4">
+    <section className="mt-4 bg-gray-50 max-w-4xl mx-auto p-4 h-(calc[100%-4rem])">
       <div className=" ">
         <div className="w-full max-w-5xl bg-white rounded-xl drop-shadow-md border border-gray-100 grid sm:grid-cols-[.75fr_2fr]">
           <aside className="bg-slate-100 border-r border-slate-200">
@@ -127,6 +134,7 @@ function UserPage() {
               </li>
             </ul>
           </aside>
+          {/* Tab Contents */}
           {activeTab === "home" && (
             <div className=" py-6 px-4">
               <h1 className="text-2xl text-center font-semibold mb-6">
@@ -134,20 +142,16 @@ function UserPage() {
               </h1>
               <div className="flex flex-col items-center rounded-lg shadow-sm border border-gray-300 p-4">
                 <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
-                  User Stats
+                  Ideas Stats
                 </h2>
                 <div className="flex gap-6">
                   <div>
-                    <p className="text-3xl text-center font-bold">12</p>
+                    <p className="text-3xl text-center font-bold">{totalIdeas}</p>
                     <p className="text-xs text-gray-700">Ideas</p>
                   </div>
                   <div>
-                    <p className="text-3xl text-center font-bold">7</p>
-                    <p className="text-xs text-gray-700">Published</p>
-                  </div>
-                  <div>
-                    <p className="text-3xl text-center font-bold">5</p>
-                    <p className="text-xs text-gray-700">Drafts</p>
+                    <p className="text-3xl text-center font-bold">{userIdeasTotal}</p>
+                    <p className="text-xs text-gray-700">Published by user</p>
                   </div>
                 </div>
               </div>
@@ -156,6 +160,7 @@ function UserPage() {
 
           {activeTab === "create-idea" && (
             <div className="container py-6 px-4">
+          {error && <div className='my-2 flex'><div className='bg-red-200 p-1 text-sm text-center max-w-xl mx-auto text-red-600 rounded-lg'>{error}</div></div>}
               <h1 className="text-2xl font-semibold mb-6">Create an idea</h1>
               <form
                 onSubmit={handleSubmit}

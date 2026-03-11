@@ -28,6 +28,7 @@ function RouteComponent() {
   const [editSummary, setEditSummary] = useState(idea.summary)
   const [editDesc, setEditDesc] = useState(idea.description)
   const [editTags, setEditTags] = useState(idea.tags.join(', '))
+  const [error, setError] = useState('');
 
   const { mutateAsync: updateMutate, isPending } = useMutation({
     mutationFn: updateIdea,
@@ -36,6 +37,9 @@ function RouteComponent() {
       queryClient.setQueryData(['ideas', ideaID], data)
       navigate({ to: '/' })
     },
+    onError: (data) => {
+      setError(data.message);    }
+
   })
     const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
       e.preventDefault()
@@ -62,6 +66,7 @@ function RouteComponent() {
     return (
       <section className="mt-4 bg-gray-50 max-w-4xl mx-auto p-4">
         <div className="w-full max-w-5xl bg-white rounded-xl drop-shadow-md border border-gray-100 container py-6 px-4">
+          {error && <div className='my-2 flex'><div className='bg-red-200 p-1 text-sm text-center max-w-xl mx-auto text-red-600 rounded-lg'>{error}</div></div>}
           <h1 className="text-2xl font-semibold mb-6">Update idea</h1>
           <form
             onSubmit={handleSubmit}

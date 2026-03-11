@@ -2,7 +2,7 @@ import axios from "axios";
 import { getStoredAccessToken, setStoredAccessToken } from "./authToken";
 import { refreshAccessToken } from "@/api/auth";
 const api = axios.create({
-    baseURL: import.meta.env.VITE_DB_BASE_URL,
+    baseURL: import.meta.env.VITE_PRODUCTION_BASE_URL,
     headers: {
         "Content-type": "application/json"
     },

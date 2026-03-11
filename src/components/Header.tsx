@@ -23,7 +23,7 @@ const IdeasHeader = () => {
     }
   }
   return (
-    <nav className="p-3 flex sm:justify-around justify-between items-center shadow-md">
+    <nav className="p-3 flex flex-col sm:flex-row sm:justify-around justify-between items-center shadow-md">
       <Link className="flex items-center" to="/">
         <img
           className="w-12 h-12"
@@ -32,7 +32,7 @@ const IdeasHeader = () => {
         />
         <h1 className="font-bold text-2xl">IdeasDrop</h1>
       </Link>
-      <div className="flex items-center gap-x-4">
+      <div className="flex items-center gap-x-10 sm:gap-x-4">
         <Link to="/ideas">
           <p className="text-slate-500 font-semibold text-lg transition hover:text-black">
             Ideas
@@ -46,7 +46,7 @@ const IdeasHeader = () => {
         </Link>
         }
       </div>
-      <div className="flex items-center sm:gap-x-2">
+      <div className="flex items-center justify-between gap-x-12 sm:gap-x-2">
         {user ? (
           <>
           <p>Welcome, {user.name}</p>          
