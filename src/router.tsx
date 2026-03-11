@@ -10,7 +10,6 @@ const queryClient = new QueryClient({
         }
     }
 })
-
 export function getRouter() {
     const router = createTanStackRouter({
         routeTree,

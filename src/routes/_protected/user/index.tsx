@@ -1,6 +1,6 @@
 import { FloatingInput } from "@/components/FloatingInput";
 import { FloatingMessageInput } from "@/components/FloatingMessageInput";
-import IdeasCard from "@/components/IdeasCard";
+// import IdeasCard from "@/components/IdeasCard";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { CirclePlus, House, Lightbulb, SquarePen } from "lucide-react";
 import { useState } from "react";
@@ -11,7 +11,9 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from "@tanstack/react-query";
-import { useAuth } from "@/context/authContext";
+import { authReady, useAuth } from "@/context/authContext";
+import type { Ideas } from "@/types";
+import IdeasCard from "@/components/IdeasCard";
 const ideasQueryOptions = () =>
   queryOptions({
     queryKey: ["ideas"],
@@ -24,26 +26,25 @@ export const Route = createFileRoute("/_protected/user/")({
   },
 });
 function UserPage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const {user} = useAuth();
-  console.log(user);
+  // Wait for reload
   const queryClient = useQueryClient();
   const { data } = useSuspenseQuery(ideasQueryOptions());
   const [activeTab, setActiveTab] = useState("home");
-  const slicedIdeas = data.slice(0, 4);
-
+  const filteredIdeas = data.filter((idea: Ideas) => idea.user === user?.id)
   // FORM STATES (NEW)
   const [newTitle, setNewTitle] = useState("");
   const [newSummary, setNewSummary] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [newTags, setNewTags] = useState("");
-
+  
   // QUERY - MUTATION
   const { mutateAsync, isPending } = useMutation({
     mutationFn: postIdea,
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: ["ideas"]}),
-      navigate({ to: "/" });
+      navigate({ to: "/ideas" });
     },
   });
   // FORM SUBMIT FN
@@ -59,9 +60,9 @@ function UserPage() {
         summary: newSummary,
         description: newDesc,
         tags: newTags
-          .split(",")
-          .map((tag) => tag.trim())
-          .filter((tag) => tag != ""),
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag != ""),
       });
     } catch (error) {
       console.error("Failed to submit new idea");
@@ -208,12 +209,16 @@ function UserPage() {
             <div className="container py-6 px-4">
               <h1 className="text-2xl font-semibold mb-6">Ideas</h1>
               <div className="grid grid-cols-2 gap-3">
-                <IdeasCard
-                  ideas={slicedIdeas}
-                  className=""
-                  showButton={true}
-                  showHome={false}
-                />
+              {filteredIdeas && filteredIdeas.length > 0 ? (
+  <IdeasCard
+    ideas={filteredIdeas}
+    className=""
+    showButton={true}
+    showHome={false}
+  />
+) : (
+  <>No currently created ideas</>
+)}
               </div>
             </div>
           )}

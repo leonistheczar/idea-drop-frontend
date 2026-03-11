@@ -2,8 +2,8 @@ import { fetchDatabyID, updateIdea } from '@/api/ideas'
 import { FloatingInput } from '@/components/FloatingInput'
 import { FloatingMessageInput } from '@/components/FloatingMessageInput'
 import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, useBlocker, useNavigate } from '@tanstack/react-router'
-import { useEffect, useMemo, useState } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useState } from 'react'
 
 const ideasQueryOptions = (ideaID: string) =>
   queryOptions({
@@ -18,8 +18,6 @@ export const Route = createFileRoute('/ideas/$ideaID/edit/')({
   },
 })
 
-const UNLOAD_MESSAGE = 'You have unsaved changes. Are you sure you want to leave?'
-
 function RouteComponent() {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -30,34 +28,6 @@ function RouteComponent() {
   const [editSummary, setEditSummary] = useState(idea.summary)
   const [editDesc, setEditDesc] = useState(idea.description)
   const [editTags, setEditTags] = useState(idea.tags.join(', '))
-
-  const isDirty = useMemo(() => {
-    const tagsStr = idea.tags.join(', ')
-    return (
-      editTitle !== idea.title ||
-      editSummary !== idea.summary ||
-      editDesc !== idea.description ||
-      editTags !== tagsStr
-    )
-  }, [idea, editTitle, editSummary, editDesc, editTags])
-
-  useBlocker({
-    shouldBlockFn: () => {
-      if (!isDirty) return false
-      return !confirm(UNLOAD_MESSAGE)
-    },
-  })
-
-  useEffect(() => {
-    if (!isDirty) return
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault()
-      e.returnValue = UNLOAD_MESSAGE
-      return UNLOAD_MESSAGE
-    }
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [isDirty])
 
   const { mutateAsync: updateMutate, isPending } = useMutation({
     mutationFn: updateIdea,

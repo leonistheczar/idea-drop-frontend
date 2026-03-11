@@ -2,7 +2,6 @@ import IdeasDetailsCard from '@/components/IdeasDetailsCard';
 import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { deleteIdea, fetchDatabyID } from '@/api/ideas';
-
 const ideasQueryOptions = (ideaID: string) =>
   queryOptions({
     queryKey: ['ideas', ideaID],
@@ -11,12 +10,16 @@ const ideasQueryOptions = (ideaID: string) =>
 
 export const Route = createFileRoute('/ideas/$ideaID/')({
   loader: async ({ params, context: { queryClient } }) => {
-    return queryClient.ensureQueryData(ideasQueryOptions(params.ideaID));
+    try {
+      return queryClient.ensureQueryData(ideasQueryOptions(params.ideaID));
+    } catch (error) {
+      return null;
+    }
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: `${loaderData.title} - IdeasDrop`,
+        title: `${loaderData?.title} - IdeasDrop`,
       },
     ],
   }),

@@ -2,6 +2,7 @@ import type { QueryClient } from "@tanstack/react-query"
 
 export type Ideas = {
     _id?: number,
+    user: string,
     title: string,
     summary: string,
     description: string,

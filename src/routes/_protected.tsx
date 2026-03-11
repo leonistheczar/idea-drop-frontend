@@ -1,20 +1,10 @@
-import { useAuth } from '@/context/authContext';
-import { createFileRoute, Outlet, useNavigate } from '@tanstack/react-router'
-import { useEffect, } from 'react';
+import { getStoredAccessToken, waitForAccessToken } from '@/lib/authToken';
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_protected')({
-  component: ProtectedRoute,
+    beforeLoad: async () => {
+        const token = waitForAccessToken();
+        if (!token) throw redirect({ to: '/login' })
+    },
+    component: () => <Outlet />,
 })
-
-function ProtectedRoute() {
-    const {user, authLoading} = useAuth();
-    const navigate = useNavigate();
-    useEffect(() => {
-        if(!authLoading && !user){
-            navigate({to:"/login"});
-        }
-    }, [user, authLoading]);
-  return (
-    <Outlet />
-  );
-}

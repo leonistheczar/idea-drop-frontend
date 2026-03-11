@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/authContext";
 import type { Ideas } from "@/types";
 import { Link } from "@tanstack/react-router";
 
@@ -19,7 +20,7 @@ const IdeasDetailsCard = ({
   deleteMutate,
 }: ideasCardProps) => {
   const ideasDate = idea.createdAt?.slice(0,10);
-  console.log(ideasDate);
+  const {user} = useAuth();
   const handleDelete = async () => {
     const confirmDeletion = confirm("Are you sure you want to delete?");
     if (confirmDeletion) {
@@ -63,6 +64,8 @@ const IdeasDetailsCard = ({
       <p className="text-gray-400 text-xs mt-4">Created at: {ideasDate}</p>
 
       <div className="flex items-center gap-x-2 mt-2">
+        {user && user.id === idea.user && (
+          <>  
         <button
           onClick={handleDelete}
           disabled={pendingState}
@@ -77,6 +80,8 @@ const IdeasDetailsCard = ({
         >
           Edit idea
         </Link>
+          </>  
+        )}
       </div>
     </div>
   );

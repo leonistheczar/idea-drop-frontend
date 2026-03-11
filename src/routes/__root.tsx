@@ -68,8 +68,8 @@ function RootErrorComponent({ error, reset }: { error: Error; reset: () => void 
 function RootComponent(){
   const { queryClient } = Route.useRouteContext();
   return (
-    <AuthProvider>
     <QueryClientProvider client={queryClient}>
+      <AuthProvider>
       <IdeasHeader />
       <Outlet />
       <TanStackDevtools
@@ -78,8 +78,8 @@ function RootComponent(){
           [{ name: 'Tanstack Router', render: <TanStackRouterDevtoolsPanel /> },
           { name: 'Tanstack Query', render: <ReactQueryDevtools /> }]}
         />
+        </AuthProvider>
     </QueryClientProvider>
-    </AuthProvider>
   )
 }
 

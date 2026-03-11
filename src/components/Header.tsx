@@ -9,8 +9,7 @@ const IdeasHeader = () => {
   const {setUser, setAccessToken} = useAuth();
   const [error, setError] = useState(null);
   const { user, setAuthLoading } = useAuth();
-  console.log(user);
-  const handleSubmit = async () => {
+  const handleLogout = async () => {
     try {
       await logOut();
       setAccessToken(null);
@@ -55,7 +54,7 @@ const IdeasHeader = () => {
           to="/"
           onClick={(e) => {e.preventDefault(); 
             if(confirm("Are you sure you want to logout?")){
-              handleSubmit();
+              handleLogout();
               }}}
           className={`px-2 py-1 rounded-md transition ${location.pathname === "/login" && user === null ? "bg-slate-200 font-semibold" : user != null ? "text-red-600 hover:bg-red-100" : "hover:bg-slate-200"}`}
         >
