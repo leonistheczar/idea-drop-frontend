@@ -58,7 +58,7 @@ function RouteComponent() {
             .map((tag: string) => tag.trim())
             .filter((tag: string) => tag !== ''),
         })
-      } catch (error) {
+      } catch (err) {
         console.error('Failed to update idea')
       }
     }

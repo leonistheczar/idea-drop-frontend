@@ -30,6 +30,9 @@ function IdeasRegister() {
       setAccessToken(data.accessToken);
       setUser(data.user);
       navigate({to: "/ideas"});
+    },
+    onError: (data) => {
+      setError(data.message)
     }
   });
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -37,7 +40,7 @@ function IdeasRegister() {
     try {
       await mutateAsync({name, email, password});
     } catch (err: any) {
-      setError(err.message);
+      console.error(err.message);
     }
   }
   return (

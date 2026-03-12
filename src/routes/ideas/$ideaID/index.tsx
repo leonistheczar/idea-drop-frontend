@@ -2,6 +2,7 @@ import IdeasDetailsCard from '@/components/IdeasDetailsCard';
 import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { deleteIdea, fetchDatabyID } from '@/api/ideas';
+import { useState } from 'react';
 const ideasQueryOptions = (ideaID: string) =>
   queryOptions({
     queryKey: ['ideas', ideaID],
@@ -31,6 +32,7 @@ function RouteComponent() {
   const queryClient = useQueryClient();
   const { ideaID } = Route.useParams();
   const { data: idea } = useSuspenseQuery(ideasQueryOptions(ideaID));
+  const [error, setError] = useState('')
 
   const { mutateAsync: deleteMutate, isPending } = useMutation({
     mutationFn: (id: string) => deleteIdea(id),
@@ -39,6 +41,9 @@ function RouteComponent() {
       queryClient.removeQueries({ queryKey: ['ideas', ideaID] });
       navigate({ to: '/' });
     },
+    onError: (data) => {
+      setError(data.message);
+    }
   });
 
   return (

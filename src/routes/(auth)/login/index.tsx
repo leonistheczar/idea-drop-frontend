@@ -25,6 +25,9 @@ function IdeasLogin() {
       setAccessToken(data.accessToken)
       setUser(data.user);
       navigate({to: "/user"})
+    },
+    onError: (data) => {
+      setError(data.message);
     }
   });
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -32,7 +35,7 @@ function IdeasLogin() {
     try {
        await mutateAsync({email, password});
     } catch (err: any) {
-        setError(err.message);
+        console.error(err.message);
     }
   }
   return (
